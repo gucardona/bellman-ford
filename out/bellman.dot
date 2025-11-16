@@ -1,29 +1,32 @@
 digraph G {
+  layout=neato;
+  overlap=false;
+  splines=true;
+  node [shape=circle, style=filled, fontsize=16, width=0.8, height=0.8];
+  edge [fontsize=14, fontcolor="#333333", dir=forward];
+  labelloc="t";
   label="Finalizado";
-  labelloc=top;
   fontsize=20;
-  rankdir=LR;
-  graph [pad="0.2", nodesep="0.5", ranksep="0.5", overlap=false, splines=true];
-  node [shape=circle, style=filled, fillcolor=white, fontsize=12, fontname="Helvetica"];
-  edge [fontsize=10, fontname="Helvetica"];
+  fontname="Arial Bold";
 
-  "S";
-  "A";
-  "B";
-  "C";
-  "D";
-  "E";
-  "F";
+  "E" [fillcolor="#ADD8E6", label="E\n-2"];
+  "F" [fillcolor="#ADD8E6", label="F\n1"];
+  "S" [fillcolor="#ADD8E6", label="S\n∞"];
+  "A" [fillcolor="#ADD8E6", label="A\n0"];
+  "B" [fillcolor="#ADD8E6", label="B\n4"];
+  "C" [fillcolor="#ADD8E6", label="C\n3"];
+  "D" [fillcolor="#ADD8E6", label="D\n2"];
 
+  "S" -> "A" [label="4", color="#888888", penwidth=2];
+  "S" -> "B" [label="2", color="#888888", penwidth=2];
+  "A" -> "C" [label="3", color="#32CD32", penwidth=3];
+  "B" -> "A" [label="1", color="#888888", penwidth=2];
+  "B" -> "D" [label="4", color="#888888", penwidth=2];
+  "A" -> "D" [label="2", color="#32CD32", penwidth=3];
+  "D" -> "E" [label="2", color="#888888", penwidth=2];
+  "C" -> "E" [label="-5", color="#32CD32", penwidth=3];
+  "E" -> "F" [label="3", color="#32CD32", penwidth=3];
+  "C" -> "B" [label="1", color="#32CD32", penwidth=3];
 
-  "S" -> "A" [label="4" color=gray];
-  "S" -> "B" [label="2" color=gray];
-  "A" -> "C" [label="3" color=green, penwidth=2.5];
-  "B" -> "A" [label="1" color=gray];
-  "B" -> "D" [label="4" color=gray];
-  "A" -> "D" [label="2" color=green, penwidth=2.5];
-  "D" -> "E" [label="2" color=gray];
-  "C" -> "E" [label="-5" color=green, penwidth=2.5];
-  "E" -> "F" [label="3" color=green, penwidth=2.5];
-  "C" -> "B" [label="1" color=green, penwidth=2.5];
+  table [shape=plaintext, label=<<TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" CELLPADDING="12" BGCOLOR="white"><TR><TD BGCOLOR="#4A90E2"><FONT COLOR="white" POINT-SIZE="18"><B>Vertex</B></FONT></TD><TD BGCOLOR="#4A90E2"><FONT COLOR="white" POINT-SIZE="18"><B>Distance</B></FONT></TD><TD BGCOLOR="#4A90E2"><FONT COLOR="white" POINT-SIZE="18"><B>Previous</B></FONT></TD><TD BGCOLOR="#4A90E2"><FONT COLOR="white" POINT-SIZE="18"><B>Visited</B></FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>A</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">0</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">-</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>B</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">4</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">C</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>C</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">3</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">A</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>D</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">2</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">A</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>E</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">-2</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">C</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>F</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">1</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">E</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>S</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">∞</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">-</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR></TABLE>>];
 }

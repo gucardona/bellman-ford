@@ -17,7 +17,6 @@ func main() {
 	infile := flag.String("i", "./src/edges.csv", "arquivo CSV de entrada (from,to,weight)")
 	source := flag.String("s", "", "nó fonte (obrigatório)")
 	outdir := flag.String("o", "./out", "diretório de saída para .dot, .png, .gif, .txt")
-	// Flag 'skipImages' removida para focar na geração de frames
 	flag.Parse()
 
 	utils.EnsurePath()
@@ -53,8 +52,6 @@ func main() {
 	}
 
 	// === Executa Dijkstra (Modo Didático) ===
-	// Executa sempre. Se houver arestas negativas, o resultado estará
-	// incorreto, o que é útil para a comparação.
 	fmt.Println("Executando Dijkstra...")
 	if hasNegative {
 		fmt.Println("AVISO: Arestas negativas detectadas. O resultado do Dijkstra pode estar incorreto.")
@@ -68,9 +65,12 @@ func main() {
 		fmt.Println("Gerando frames do Dijkstra...")
 		dijkstraFrameDir := filepath.Join(*outdir, "dijkstra_frames")
 		os.MkdirAll(dijkstraFrameDir, 0755)
-		dijkstraFramePaths := generateFrames(g, dijkstraSnapshots, dijkstraFrameDir, "Dijkstra")
 
-		if len(dijkstraFramePaths) > 0 {
+		// Chama a nova função GenerateFrames (do gif.go)
+		dijkstraFramePaths, err := generate.GenerateFrames(g, dijkstraSnapshots, dijkstraFrameDir, "Dijkstra")
+		if err != nil {
+			fmt.Printf("Erro ao gerar frames do Dijkstra: %v\n", err)
+		} else {
 			gifPath := filepath.Join(*outdir, "dijkstra_animation.gif")
 			fmt.Println("Montando GIF animado do Dijkstra:", gifPath)
 			if err := generate.CreateGIF(gifPath, dijkstraFramePaths, "100"); err != nil { // delay 100
@@ -99,9 +99,12 @@ func main() {
 		fmt.Println("Gerando frames do Bellman-Ford...")
 		frameDir := filepath.Join(*outdir, "bf_frames")
 		os.MkdirAll(frameDir, 0755)
-		framePaths := generateFrames(g, snapshots, frameDir, "Bellman-Ford")
 
-		if len(framePaths) > 0 {
+		// Chama a nova função GenerateFrames (do gif.go)
+		framePaths, err := generate.GenerateFrames(g, snapshots, frameDir, "Bellman-Ford")
+		if err != nil {
+			fmt.Printf("Erro ao gerar frames do Bellman-Ford: %v\n", err)
+		} else {
 			gifPath := filepath.Join(*outdir, "bellman_animation.gif")
 			fmt.Println("Montando GIF animado do Bellman-Ford:", gifPath)
 			if err := generate.CreateGIF(gifPath, framePaths, "80"); err != nil { // delay 80
@@ -124,29 +127,4 @@ func main() {
 	}
 
 	fmt.Println("Processo concluído. Verifique o diretório:", *outdir)
-}
-
-// generateFrames itera sobre os snapshots, gera um .dot e .png para cada um,
-// e retorna a lista de caminhos dos .png gerados.
-func generateFrames(g *graph.Graph, snapshots []graph.Snapshot, outdir string, algName string) []string {
-	framePaths := []string{}
-	for i, snap := range snapshots {
-		dotPath := filepath.Join(outdir, fmt.Sprintf("frame_%04d.dot", i))
-		pngPath := filepath.Join(outdir, fmt.Sprintf("frame_%04d.png", i))
-
-		// Passa o snapshot atual para o WriteDOT
-		title := fmt.Sprintf("%s - %s", algName, snap.StepTitle)
-		if err := generate.WriteDOT(g, &snap, dotPath, title); err != nil {
-			fmt.Printf("Erro frame %d: %v\n", i, err)
-			continue
-		}
-
-		// Converte .dot -> .png
-		if err := generate.RenderDotToPNG(dotPath, pngPath); err != nil {
-			fmt.Printf("Erro renderizando %s: %v\n", dotPath, err)
-			continue
-		}
-		framePaths = append(framePaths, pngPath)
-	}
-	return framePaths
 }
