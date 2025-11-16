@@ -1,18 +1,21 @@
 package generate
 
 import (
+	"bufio"
+	"bytes"
 	"fmt"
 	"math"
 	"os"
+	"os/exec"
 	"sort"
+	"strconv"
 	"strings"
 
 	"github.com/gucardona/bellman-ford/src/graph"
 )
 
 // WriteDOT gera um .dot que destaca o estado atual do algoritmo (snapshot).
-// Convertido para usar a lógica do 'dijkstra-visualizer' (layout neato, tabela HTML).
-func WriteDOT(g *graph.Graph, snap *graph.Snapshot, outpath string, title string) error {
+func WriteDOT(g *graph.Graph, snap *graph.Snapshot, outpath string, title string, positions map[string]string, graphCenterX float64) error {
 	f, err := os.Create(outpath)
 	if err != nil {
 		return err
@@ -22,12 +25,11 @@ func WriteDOT(g *graph.Graph, snap *graph.Snapshot, outpath string, title string
 	var sb strings.Builder
 
 	sb.WriteString("digraph G {\n")
-	// Usa 'neato' para um layout estável "force-directed"
 	sb.WriteString("  layout=neato;\n")
 	sb.WriteString("  overlap=false;\n")
 	sb.WriteString("  splines=true;\n")
 	sb.WriteString("  node [shape=circle, style=filled, fontsize=16, width=0.8, height=0.8];\n")
-	sb.WriteString("  edge [fontsize=14, fontcolor=\"#333333\", dir=forward];\n") // dijkstra era 'dir=none'
+	sb.WriteString("  edge [fontsize=14, fontcolor=\"#333333\", dir=forward];\n")
 	sb.WriteString("  labelloc=\"t\";\n")
 
 	// Título do Snapshot
@@ -39,14 +41,18 @@ func WriteDOT(g *graph.Graph, snap *graph.Snapshot, outpath string, title string
 	sb.WriteString("  fontsize=20;\n")
 	sb.WriteString("  fontname=\"Arial Bold\";\n\n")
 
-	// 1. Define todos os nós COM seus estilos
+	// 1. Define todos os nós COM seus estilos E POSIÇÕES
 	for n := range g.Nodes {
 		color := getVertexColor(n, snap)
 		distLabel := getDistanceLabel(snap.Dist[n])
 
-		// Não usamos 'pos' fixas, pois o CSV é dinâmico
-		sb.WriteString(fmt.Sprintf("  \"%s\" [fillcolor=\"%s\", label=\"%s\\n%s\"];\n",
-			escape(n), color, escape(n), distLabel))
+		pos, ok := positions[n]
+		if !ok {
+			return fmt.Errorf("posição não encontrada para o nó: %s", n)
+		}
+
+		sb.WriteString(fmt.Sprintf("  \"%s\" [fillcolor=\"%s\", label=\"%s\n%s\", pos=\"%s\"];\n",
+			escape(n), color, escape(n), distLabel, pos))
 	}
 	sb.WriteString("\n")
 
@@ -72,7 +78,7 @@ func WriteDOT(g *graph.Graph, snap *graph.Snapshot, outpath string, title string
 
 	sb.WriteString("\n")
 	// 3. Gera a tabela HTML (lógica exata do dijkstra-visualizer)
-	sb.WriteString(generateTable(snap))
+	sb.WriteString(generateTable(snap, graphCenterX))
 
 	sb.WriteString("}\n")
 
@@ -81,7 +87,7 @@ func WriteDOT(g *graph.Graph, snap *graph.Snapshot, outpath string, title string
 }
 
 // generateTable cria a tabela HTML para o .dot
-func generateTable(step *graph.Snapshot) string {
+func generateTable(step *graph.Snapshot, graphCenterX float64) string {
 	if step == nil {
 		return ""
 	}
@@ -131,9 +137,13 @@ func generateTable(step *graph.Snapshot) string {
 
 	tableLabel += "</TABLE>>"
 
-	// Define a tabela num nó 'invisível' e o posiciona (layout=neato não usa rank)
-	// Posiciona a tabela abaixo do grafo
-	sb.WriteString(fmt.Sprintf("  table [shape=plaintext, label=%s];\n", tableLabel))
+	// --- INÍCIO DA MUDANÇA (Bug de Espaçamento) ---
+	// Diminuímos o Y para ficar mais próximo (o grafo agora começa em 120)
+	const tableYPos = 0.0
+	// --- FIM DA MUDANÇA ---
+
+	sb.WriteString(fmt.Sprintf("  table [shape=plaintext, label=%s, pos=\"%f,%f!\"];\n",
+		tableLabel, graphCenterX, tableYPos))
 
 	return sb.String()
 }
@@ -174,10 +184,6 @@ func getEdgeColor(edge graph.Edge, step *graph.Snapshot, treeEdges map[string]st
 		return "#32CD32" // Verde (na árvore)
 	}
 
-	if edge.W < 0 {
-		return "#FF0000" // Vermelho (negativo)
-	}
-
 	return "#888888" // Preto/Cinza padrão
 }
 
@@ -212,4 +218,89 @@ func escapeHTML(s string) string {
 	s = strings.ReplaceAll(s, ">", "&gt;")
 	s = strings.ReplaceAll(s, "\"", "&quot;")
 	return s
+}
+
+// CalculateLayout executa o 'neato' uma vez para obter posições estáveis dos nós.
+// Retorna um mapa de [nomeDoNó] -> "x,y!" E a coordenada X central
+func CalculateLayout(g *graph.Graph) (map[string]string, float64, error) {
+	var sb strings.Builder
+	sb.WriteString("digraph G {\n")
+	sb.WriteString("  layout=neato;\n")
+	sb.WriteString("  overlap=false;\n")
+
+	// Define nós
+	for n := range g.Nodes {
+		sb.WriteString(fmt.Sprintf("  \"%s\";\n", escape(n)))
+	}
+	// Define arestas
+	for _, e := range g.Edges {
+		sb.WriteString(fmt.Sprintf("  \"%s\" -> \"%s\";\n", escape(e.From), escape(e.To)))
+	}
+	sb.WriteString("}\n")
+
+	// Executa 'neato -Tplain'
+	cmd := exec.Command("neato", "-Tplain")
+	cmd.Stdin = strings.NewReader(sb.String())
+	var out bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &stderr
+
+	if err := cmd.Run(); err != nil {
+		return nil, 0, fmt.Errorf("falha ao rodar 'neato' para calcular layout: %v\nStderr: %s", err, stderr.String())
+	}
+
+	positions := make(map[string]string)
+	scanner := bufio.NewScanner(&out)
+
+	const verticalOffset = 2.0
+	var totalX float64 = 0
+	var nodeCount float64 = 0
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		parts := strings.Fields(line)
+
+		if len(parts) > 0 && parts[0] == "node" {
+			if len(parts) >= 4 {
+				nodeName := parts[1]
+				xStr := parts[2]
+				yStr := parts[3]
+
+				x, errX := strconv.ParseFloat(xStr, 64)
+				y, errY := strconv.ParseFloat(yStr, 64)
+
+				if errX != nil || errY != nil {
+					positions[nodeName] = fmt.Sprintf("%s,%s!", xStr, yStr) // fallback
+					continue
+				}
+
+				// Acumula X para média
+				totalX += x
+				nodeCount++
+
+				// Adiciona o offset e formata de volta para string
+				yWithOffset := y + verticalOffset
+
+				// O "!" é crucial para travar a posição
+				positions[nodeName] = fmt.Sprintf("%f,%f!", x, yWithOffset)
+			}
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, 0, fmt.Errorf("erro ao ler saída do neato: %w", err)
+	}
+
+	if len(positions) == 0 {
+		return nil, 0, fmt.Errorf("nenhuma posição de nó foi calculada. Verifique se 'neato' (Graphviz) está instalado")
+	}
+
+	// Calcula o X central
+	graphCenterX := 0.0
+	if nodeCount > 0 {
+		graphCenterX = totalX / nodeCount
+	}
+
+	return positions, graphCenterX, nil
 }

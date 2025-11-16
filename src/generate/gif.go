@@ -11,9 +11,8 @@ import (
 )
 
 // GenerateFrames itera sobre os snapshots, gera um .dot e .png para cada um.
-// Esta função agora também renderiza o PNG, forçando o uso do 'dot'.
-// Adaptado de 'dijkstra-visualizer/internal/visualizer/media.go'
-func GenerateFrames(g *graph.Graph, snapshots []graph.Snapshot, outputDir string, algName string) ([]string, error) {
+// ATUALIZADO: Aceita 'graphCenterX'
+func GenerateFrames(g *graph.Graph, snapshots []graph.Snapshot, outputDir string, algName string, positions map[string]string, graphCenterX float64) ([]string, error) {
 	framePaths := []string{}
 	for i, snap := range snapshots {
 		// Gera o título para este frame
@@ -22,16 +21,18 @@ func GenerateFrames(g *graph.Graph, snapshots []graph.Snapshot, outputDir string
 		pngFile := filepath.Join(outputDir, fmt.Sprintf("frame_%04d.png", i))
 
 		// 1. Chama o WriteDOT (que agora escreve os atributos 'pos')
-		if err := WriteDOT(g, &snap, dotFile, title); err != nil {
+		if err := WriteDOT(g, &snap, dotFile, title, positions, graphCenterX); err != nil {
 			fmt.Printf("Aviso: falha ao escrever .dot para frame %d: %v\n", i, err)
 			continue // Pula este frame
 		}
 
-		// 2. Força o uso do 'dot' para renderizar (lógica do dijkstra-visualizer)
-		// Isto respeita o 'layout=neato' escrito no .dot.
-		cmd := exec.Command("dot", "-Tpng", dotFile, "-o", pngFile)
+		// --- INÍCIO DA MUDANÇA ---
+		// 2. Força o uso do 'neato' para renderizar (antes estava 'dot')
+		// Isto garante que o motor de renderização seja o mesmo do cálculo de layout.
+		cmd := exec.Command("neato", "-Tpng", dotFile, "-o", pngFile)
+		// --- FIM DA MUDANÇA ---
 		if output, err := cmd.CombinedOutput(); err != nil {
-			// Se 'dot' falhar, avisa e pula
+			// Se 'neato' falhar, avisa e pula
 			fmt.Printf("Aviso: falha ao renderizar .png para frame %d: %w\nOutput: %s\n", i, err, output)
 			continue // Pula este frame
 		}
@@ -41,7 +42,7 @@ func GenerateFrames(g *graph.Graph, snapshots []graph.Snapshot, outputDir string
 	}
 
 	if len(framePaths) == 0 {
-		return nil, fmt.Errorf("nenhum frame .png foi gerado com sucesso. Verifique se 'dot' (Graphviz) está instalado")
+		return nil, fmt.Errorf("nenhum frame .png foi gerado com sucesso. Verifique se 'neato' (Graphviz) está instalado")
 	}
 	return framePaths, nil
 }

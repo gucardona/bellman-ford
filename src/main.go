@@ -42,6 +42,17 @@ func main() {
 		os.Exit(1)
 	}
 
+	// === ATUALIZADO: Calcula o layout ESTÁVEL e X Central ===
+	fmt.Println("Calculando layout estável com 'neato'...")
+	positions, graphCenterX, errLayout := generate.CalculateLayout(g)
+	if errLayout != nil {
+		fmt.Printf("Erro ao calcular layout: %v\n", errLayout)
+		fmt.Println("Verifique se 'neato' (parte do Graphviz) está instalado e no PATH.")
+		os.Exit(1)
+	}
+	fmt.Println("Layout calculado.")
+	// === FIM ATUALIZAÇÃO ===
+
 	// Detecta arestas negativas
 	hasNegative := false
 	for _, e := range g.Edges {
@@ -67,7 +78,8 @@ func main() {
 		os.MkdirAll(dijkstraFrameDir, 0755)
 
 		// Chama a nova função GenerateFrames (do gif.go)
-		dijkstraFramePaths, err := generate.GenerateFrames(g, dijkstraSnapshots, dijkstraFrameDir, "Dijkstra")
+		// ATUALIZADO: passar 'graphCenterX'
+		dijkstraFramePaths, err := generate.GenerateFrames(g, dijkstraSnapshots, dijkstraFrameDir, "Dijkstra", positions, graphCenterX)
 		if err != nil {
 			fmt.Printf("Erro ao gerar frames do Dijkstra: %v\n", err)
 		} else {
@@ -85,7 +97,8 @@ func main() {
 		if hasNegative {
 			title += " (Resultado PODE ESTAR INCORRETO)"
 		}
-		generate.WriteDOT(g, &finalDijkstraSnap, dotPath, title)
+		// ATUALIZADO: passar 'graphCenterX'
+		generate.WriteDOT(g, &finalDijkstraSnap, dotPath, title, positions, graphCenterX)
 		utils.SaveDistances(finalDijkstraSnap.Dist, filepath.Join(*outdir, "dijkstra_dist.txt"))
 	}
 
@@ -101,7 +114,8 @@ func main() {
 		os.MkdirAll(frameDir, 0755)
 
 		// Chama a nova função GenerateFrames (do gif.go)
-		framePaths, err := generate.GenerateFrames(g, snapshots, frameDir, "Bellman-Ford")
+		// ATUALIZADO: passar 'graphCenterX'
+		framePaths, err := generate.GenerateFrames(g, snapshots, frameDir, "Bellman-Ford", positions, graphCenterX)
 		if err != nil {
 			fmt.Printf("Erro ao gerar frames do Bellman-Ford: %v\n", err)
 		} else {
@@ -119,7 +133,8 @@ func main() {
 			title += " (CICLO NEGATIVO DETECTADO)"
 		}
 		dotPath := filepath.Join(*outdir, "bellman.dot")
-		generate.WriteDOT(g, &finalSnap, dotPath, title) // Passa o snapshot final
+		// ATUALIZADO: passar 'graphCenterX'
+		generate.WriteDOT(g, &finalSnap, dotPath, title, positions, graphCenterX) // Passa o snapshot final
 		utils.SaveDistances(finalSnap.Dist, filepath.Join(*outdir, "bellman_dist.txt"))
 		if negCycle {
 			fmt.Println("Aviso: ciclo negativo detectado.")
