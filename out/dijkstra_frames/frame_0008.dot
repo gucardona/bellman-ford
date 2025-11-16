@@ -1,5 +1,5 @@
 digraph G {
-  label="Finalizado";
+  label="Relaxou C->B! (nova dist: 4.00)";
   labelloc=top;
   fontsize=20;
   rankdir=LR;
@@ -7,14 +7,18 @@ digraph G {
   node [shape=circle, style=filled, fillcolor=white, fontsize=12, fontname="Helvetica"];
   edge [fontsize=10, fontname="Helvetica"];
 
+  "E";
+  "F";
   "S";
   "A";
   "B";
   "C";
   "D";
-  "E";
-  "F";
 
+  "A" [fillcolor=lightgray];
+  "B" [fillcolor=lightblue];
+  "C" [fillcolor=lightgray];
+  "D" [fillcolor=lightgray];
 
   "S" -> "A" [label="4" color=gray];
   "S" -> "B" [label="2" color=gray];
@@ -24,6 +28,6 @@ digraph G {
   "A" -> "D" [label="2" color=green, penwidth=2.5];
   "D" -> "E" [label="2" color=gray];
   "C" -> "E" [label="-5" color=green, penwidth=2.5];
-  "E" -> "F" [label="3" color=green, penwidth=2.5];
-  "C" -> "B" [label="1" color=green, penwidth=2.5];
+  "E" -> "F" [label="3" color=gray];
+  "C" -> "B" [label="1" color=blue, penwidth=3.0, style=dashed];
 }

@@ -7,13 +7,13 @@ digraph G {
   node [shape=circle, style=filled, fillcolor=white, fontsize=12, fontname="Helvetica"];
   edge [fontsize=10, fontname="Helvetica"];
 
-  "S";
-  "A";
-  "B";
   "C";
   "D";
   "E";
   "F";
+  "S";
+  "A";
+  "B";
 
 
   "S" -> "A" [label="4" color=gray];

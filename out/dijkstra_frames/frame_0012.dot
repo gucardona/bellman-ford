@@ -1,5 +1,5 @@
 digraph G {
-  label="Finalizado";
+  label="Visitando nó B (dist: 4.00)";
   labelloc=top;
   fontsize=20;
   rankdir=LR;
@@ -15,6 +15,12 @@ digraph G {
   "E";
   "F";
 
+  "A" [fillcolor=lightgray];
+  "B" [fillcolor=lightblue];
+  "C" [fillcolor=lightgray];
+  "D" [fillcolor=lightgray];
+  "E" [fillcolor=lightgray];
+  "F" [fillcolor=lightgray];
 
   "S" -> "A" [label="4" color=gray];
   "S" -> "B" [label="2" color=gray];

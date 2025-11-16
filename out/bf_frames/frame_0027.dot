@@ -1,5 +1,5 @@
 digraph G {
-  label="Finalizado";
+  label="Checando ciclo: B->D";
   labelloc=top;
   fontsize=20;
   rankdir=LR;
@@ -20,7 +20,7 @@ digraph G {
   "S" -> "B" [label="2" color=gray];
   "A" -> "C" [label="3" color=green, penwidth=2.5];
   "B" -> "A" [label="1" color=gray];
-  "B" -> "D" [label="4" color=gray];
+  "B" -> "D" [label="4" color=blue, penwidth=3.0, style=dashed];
   "A" -> "D" [label="2" color=green, penwidth=2.5];
   "D" -> "E" [label="2" color=gray];
   "C" -> "E" [label="-5" color=green, penwidth=2.5];

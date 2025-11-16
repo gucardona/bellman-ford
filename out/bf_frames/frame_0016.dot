@@ -1,5 +1,5 @@
 digraph G {
-  label="Finalizado";
+  label="Iter. 2: Checando B->A";
   labelloc=top;
   fontsize=20;
   rankdir=LR;
@@ -19,7 +19,7 @@ digraph G {
   "S" -> "A" [label="4" color=gray];
   "S" -> "B" [label="2" color=gray];
   "A" -> "C" [label="3" color=green, penwidth=2.5];
-  "B" -> "A" [label="1" color=gray];
+  "B" -> "A" [label="1" color=blue, penwidth=3.0, style=dashed];
   "B" -> "D" [label="4" color=gray];
   "A" -> "D" [label="2" color=green, penwidth=2.5];
   "D" -> "E" [label="2" color=gray];

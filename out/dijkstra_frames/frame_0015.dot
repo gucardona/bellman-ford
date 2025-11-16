@@ -15,6 +15,12 @@ digraph G {
   "E";
   "F";
 
+  "A" [fillcolor=lightgray];
+  "B" [fillcolor=lightgray];
+  "C" [fillcolor=lightgray];
+  "D" [fillcolor=lightgray];
+  "E" [fillcolor=lightgray];
+  "F" [fillcolor=lightgray];
 
   "S" -> "A" [label="4" color=gray];
   "S" -> "B" [label="2" color=gray];

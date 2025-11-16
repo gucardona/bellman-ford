@@ -72,3 +72,43 @@ func (g *Graph) AddEdge(e Edge) {
 	g.Adj[e.From] = append(g.Adj[e.From], e)
 	g.Edges = append(g.Edges, e)
 }
+
+// Snapshot armazena o estado do algoritmo em um ponto específico no tempo.
+// Usado para gerar frames de uma animação.
+type Snapshot struct {
+	Dist      map[string]float64 // Distâncias atuais
+	Prev      map[string]string  // Predecessores atuais
+	StepTitle string             // Ex: "Iteração 2", "Relaxando A->B"
+
+	// Para destacar no .dot
+	ActiveEdge  *Edge           // Aresta sendo processada (azul, tracejada)
+	UpdatedNode string          // Nó que teve a distância atualizada (preenchido)
+	Visited     map[string]bool // Para Dijkstra: nós já visitados (cinza)
+}
+
+// CopyDist cria uma cópia profunda de um mapa de distâncias.
+func CopyDist(m map[string]float64) map[string]float64 {
+	newMap := make(map[string]float64)
+	for k, v := range m {
+		newMap[k] = v
+	}
+	return newMap
+}
+
+// CopyPrev cria uma cópia profunda de um mapa de predecessores.
+func CopyPrev(m map[string]string) map[string]string {
+	newMap := make(map[string]string)
+	for k, v := range m {
+		newMap[k] = v
+	}
+	return newMap
+}
+
+// CopyVisited cria uma cópia profunda de um mapa de nós visitados.
+func CopyVisited(m map[string]bool) map[string]bool {
+	newMap := make(map[string]bool)
+	for k, v := range m {
+		newMap[k] = v
+	}
+	return newMap
+}

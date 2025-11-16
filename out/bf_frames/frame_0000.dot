@@ -1,5 +1,5 @@
 digraph G {
-  label="Finalizado";
+  label="Estado Inicial";
   labelloc=top;
   fontsize=20;
   rankdir=LR;
@@ -7,23 +7,23 @@ digraph G {
   node [shape=circle, style=filled, fillcolor=white, fontsize=12, fontname="Helvetica"];
   edge [fontsize=10, fontname="Helvetica"];
 
+  "D";
+  "E";
+  "F";
   "S";
   "A";
   "B";
   "C";
-  "D";
-  "E";
-  "F";
 
 
   "S" -> "A" [label="4" color=gray];
   "S" -> "B" [label="2" color=gray];
-  "A" -> "C" [label="3" color=green, penwidth=2.5];
+  "A" -> "C" [label="3" color=gray];
   "B" -> "A" [label="1" color=gray];
   "B" -> "D" [label="4" color=gray];
-  "A" -> "D" [label="2" color=green, penwidth=2.5];
+  "A" -> "D" [label="2" color=gray];
   "D" -> "E" [label="2" color=gray];
-  "C" -> "E" [label="-5" color=green, penwidth=2.5];
-  "E" -> "F" [label="3" color=green, penwidth=2.5];
-  "C" -> "B" [label="1" color=green, penwidth=2.5];
+  "C" -> "E" [label="-5" color=red, style=dashed];
+  "E" -> "F" [label="3" color=gray];
+  "C" -> "B" [label="1" color=gray];
 }

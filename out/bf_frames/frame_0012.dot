@@ -1,5 +1,5 @@
 digraph G {
-  label="Finalizado";
+  label="Início da Iteração 2 / 6";
   labelloc=top;
   fontsize=20;
   rankdir=LR;

@@ -1,5 +1,5 @@
 digraph G {
-  label="Finalizado";
+  label="Relaxou A->C! (nova dist: 3.00)";
   labelloc=top;
   fontsize=20;
   rankdir=LR;
@@ -15,15 +15,17 @@ digraph G {
   "E";
   "F";
 
+  "C" [fillcolor=lightblue];
+  "A" [fillcolor=lightgray];
 
   "S" -> "A" [label="4" color=gray];
   "S" -> "B" [label="2" color=gray];
-  "A" -> "C" [label="3" color=green, penwidth=2.5];
+  "A" -> "C" [label="3" color=blue, penwidth=3.0, style=dashed];
   "B" -> "A" [label="1" color=gray];
   "B" -> "D" [label="4" color=gray];
-  "A" -> "D" [label="2" color=green, penwidth=2.5];
+  "A" -> "D" [label="2" color=gray];
   "D" -> "E" [label="2" color=gray];
-  "C" -> "E" [label="-5" color=green, penwidth=2.5];
-  "E" -> "F" [label="3" color=green, penwidth=2.5];
-  "C" -> "B" [label="1" color=green, penwidth=2.5];
+  "C" -> "E" [label="-5" color=red, style=dashed];
+  "E" -> "F" [label="3" color=gray];
+  "C" -> "B" [label="1" color=gray];
 }

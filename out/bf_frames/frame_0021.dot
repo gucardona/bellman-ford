@@ -1,5 +1,5 @@
 digraph G {
-  label="Finalizado";
+  label="Iter. 2: Checando E->F";
   labelloc=top;
   fontsize=20;
   rankdir=LR;
@@ -7,13 +7,13 @@ digraph G {
   node [shape=circle, style=filled, fillcolor=white, fontsize=12, fontname="Helvetica"];
   edge [fontsize=10, fontname="Helvetica"];
 
-  "S";
   "A";
   "B";
   "C";
   "D";
   "E";
   "F";
+  "S";
 
 
   "S" -> "A" [label="4" color=gray];
@@ -24,6 +24,6 @@ digraph G {
   "A" -> "D" [label="2" color=green, penwidth=2.5];
   "D" -> "E" [label="2" color=gray];
   "C" -> "E" [label="-5" color=green, penwidth=2.5];
-  "E" -> "F" [label="3" color=green, penwidth=2.5];
+  "E" -> "F" [label="3" color=blue, penwidth=3.0, style=dashed];
   "C" -> "B" [label="1" color=green, penwidth=2.5];
 }

@@ -3,47 +3,13 @@ package generate
 import (
 	"fmt"
 	"os/exec"
-	"path/filepath"
 
 	"github.com/gucardona/bellman-ford/src/utils"
 )
 
-func GenerateImagesAndGIF(outdir string) error {
-	dijkstraDot := filepath.Join(outdir, "dijkstra.dot")
-	bellmanDot := filepath.Join(outdir, "bellman.dot")
-	dijkstraPng := filepath.Join(outdir, "dijkstra.png")
-	bellmanPng := filepath.Join(outdir, "bellman.png")
-	gifFile := filepath.Join(outdir, "comparison.gif")
-
-	// Converte DOT -> PNG usando Graphviz
-	if utils.FileExists(dijkstraDot) {
-		if err := renderDotToPNG(dijkstraDot, dijkstraPng); err != nil {
-			return fmt.Errorf("erro convertendo %s: %w", dijkstraDot, err)
-		}
-		fmt.Println("Gerado:", dijkstraPng)
-	}
-
-	if utils.FileExists(bellmanDot) {
-		if err := renderDotToPNG(bellmanDot, bellmanPng); err != nil {
-			return fmt.Errorf("erro convertendo %s: %w", bellmanDot, err)
-		}
-		fmt.Println("Gerado:", bellmanPng)
-	}
-
-	// Se ambos os PNG existirem, gera GIF
-	if utils.FileExists(dijkstraPng) && utils.FileExists(bellmanPng) {
-		if err := utils.RunCmd("convert", "-delay", "120", "-loop", "0", dijkstraPng, bellmanPng, gifFile); err != nil {
-			return fmt.Errorf("erro criando GIF: %w", err)
-		}
-		fmt.Println("GIF criado:", gifFile)
-	} else {
-		fmt.Println("PNG(s) faltando, GIF não foi gerado.")
-	}
-
-	return nil
-}
-
-func renderDotToPNG(dotPath, pngPath string) error {
+// RenderDotToPNG converte um arquivo .dot em .png usando graphviz.
+// Tenta usar 'sfdp', 'neato' e 'dot' em ordem de preferência.
+func RenderDotToPNG(dotPath, pngPath string) error {
 	// prioridade: sfdp (bom para grafos maiores), depois neato, depois dot
 	tryCmds := [][]string{
 		// sfdp: bom para layouts em força em grafos maiores
@@ -70,4 +36,22 @@ func renderDotToPNG(dotPath, pngPath string) error {
 		return nil
 	}
 	return fmt.Errorf("nenhum renderer disponível (tentadas: sfdp, neato, dot) ou todas falharam")
+}
+
+// CreateGIF usa o ImageMagick (comando 'convert') para unir múltiplos
+// arquivos .png em um .gif animado.
+func CreateGIF(gifPath string, framePaths []string, delay string) error {
+	if len(framePaths) == 0 {
+		return fmt.Errorf("nenhum frame fornecido para o GIF")
+	}
+
+	// Usa 'convert' (ImageMagick)
+	args := []string{"-delay", delay, "-loop", "0"}
+	args = append(args, framePaths...) // Adiciona todos os PNGs
+	args = append(args, gifPath)       // Arquivo de saída
+
+	if err := utils.RunCmd("convert", args...); err != nil {
+		return fmt.Errorf("erro criando GIF com 'convert': %w", err)
+	}
+	return nil
 }
