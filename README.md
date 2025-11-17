@@ -134,20 +134,3 @@ dot -Tpng out/bellman.dot -o out/bellman.png
 ```
 
 ---
-
-## Desenvolvimento e testes
-
-- Código de algoritmos em `src/algorithm/` — adicione testes unitários (`*_test.go`) para Dijkstra e Bellman-Ford.
-- Funções de geração ficam em `src/generate/`.
-- Modelo de grafo e CSV loader em `src/graph/`.
-
----
-
-## Possíveis melhorias
-
-- Adicionar `Makefile` com targets: `make run`, `make gif`, `make clean`
-- Adicionar testes unitários e benchmarks (`go test -bench .`)
-- Implementar modo verbose com etapas intermediárias (passo a passo) para criar GIFs que mostram relaxamentos
-- Exportar resultados em JSON/CSV para inclusão automática no relatório
-
----
