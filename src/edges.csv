@@ -1,6 +1,9 @@
 from,to,weight
-S,A,2
-S,B,5
-A,C,3
-C,B,-5
-B,D,1
+S,A,7
+S,E,8
+A,C,2
+B,A,1
+C,B,-2
+D,A,-4
+D,C,-1
+E,D,1

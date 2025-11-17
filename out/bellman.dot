@@ -9,22 +9,27 @@ digraph G {
   fontsize=20;
   fontname="Arial Bold";
 
-  "S" [fillcolor="#ADD8E6", label="S
-0", pos="1.510200,2.250000!"];
-  "A" [fillcolor="#ADD8E6", label="A
-2", pos="0.375000,4.687600!"];
   "B" [fillcolor="#ADD8E6", label="B
-0", pos="4.030600,3.193300!"];
-  "C" [fillcolor="#ADD8E6", label="C
-5", pos="2.888400,5.635400!"];
+5", pos="0.375000,2.250000!"];
   "D" [fillcolor="#ADD8E6", label="D
-1", pos="6.429300,2.291830!"];
+9", pos="3.827100,5.783500!"];
+  "S" [fillcolor="#ADD8E6", label="S
+0", pos="5.854700,2.348040!"];
+  "A" [fillcolor="#ADD8E6", label="A
+5", pos="3.043500,2.958670!"];
+  "E" [fillcolor="#ADD8E6", label="E
+8", pos="6.661200,5.144800!"];
+  "C" [fillcolor="#ADD8E6", label="C
+7", pos="1.266800,4.844000!"];
 
-  "S" -> "A" [label="2", color="#32CD32", penwidth=3];
-  "S" -> "B" [label="5", color="#888888", penwidth=2];
-  "A" -> "C" [label="3", color="#32CD32", penwidth=3];
-  "C" -> "B" [label="-5", color="#32CD32", penwidth=3];
-  "B" -> "D" [label="1", color="#32CD32", penwidth=3];
+  "S" -> "A" [label="7", color="#888888", penwidth=2];
+  "S" -> "E" [label="8", color="#32CD32", penwidth=3];
+  "A" -> "C" [label="2", color="#32CD32", penwidth=3];
+  "B" -> "A" [label="1", color="#888888", penwidth=2];
+  "C" -> "B" [label="-2", color="#32CD32", penwidth=3];
+  "D" -> "A" [label="-4", color="#32CD32", penwidth=3];
+  "D" -> "C" [label="-1", color="#888888", penwidth=2];
+  "E" -> "D" [label="1", color="#32CD32", penwidth=3];
 
-  table [shape=plaintext, label=<<TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" CELLPADDING="12" BGCOLOR="white"><TR><TD BGCOLOR="#4A90E2"><FONT COLOR="white" POINT-SIZE="18"><B>Vertex</B></FONT></TD><TD BGCOLOR="#4A90E2"><FONT COLOR="white" POINT-SIZE="18"><B>Distance</B></FONT></TD><TD BGCOLOR="#4A90E2"><FONT COLOR="white" POINT-SIZE="18"><B>Previous</B></FONT></TD><TD BGCOLOR="#4A90E2"><FONT COLOR="white" POINT-SIZE="18"><B>Visited</B></FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>A</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">2</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">S</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>B</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">0</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">C</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>C</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">5</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">A</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>D</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">1</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">B</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>S</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">0</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">-</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR></TABLE>>, pos="3.046700,0.000000!"];
+  table [shape=plaintext, label=<<TABLE BORDER="2" CELLBORDER="1" CELLSPACING="0" CELLPADDING="12" BGCOLOR="white"><TR><TD BGCOLOR="#4A90E2"><FONT COLOR="white" POINT-SIZE="18"><B>Vertex</B></FONT></TD><TD BGCOLOR="#4A90E2"><FONT COLOR="white" POINT-SIZE="18"><B>Distance</B></FONT></TD><TD BGCOLOR="#4A90E2"><FONT COLOR="white" POINT-SIZE="18"><B>Previous</B></FONT></TD><TD BGCOLOR="#4A90E2"><FONT COLOR="white" POINT-SIZE="18"><B>Visited</B></FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>A</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">5</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">D</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>B</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">5</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">C</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>C</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">7</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">A</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>D</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">9</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">E</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>E</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">8</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">S</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16"><B>S</B></FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">0</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">-</FONT></TD><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="16">No</FONT></TD></TR></TABLE>>, pos="3.504717,0.000000!"];
 }
